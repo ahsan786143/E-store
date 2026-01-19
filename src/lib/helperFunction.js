@@ -15,10 +15,16 @@ export const response= (success, statusCode, message, data={}) => {
 
 export const catchError = (error, customMessage) => {
   // Handle duplicate key error
-  if (error.code === 11000) {
-    const keys = Object.keys(error.keyPattern).join(", ");
-    error.message = `Duplicate field(s): ${keys}. These fields must be unique.`;
+ if (error.code === 11000) {
+  const keys = Object.keys(error.keyPattern);
+
+  if (keys.includes("product") && keys.includes("size")) {
+    error.message = "This size already exists for the selected product.";
+  } else {
+    error.message = `Duplicate field(s): ${keys.join(", ")}. These fields must be unique.`;
   }
+}
+
 
   // Default error object
   let errorObj = {};

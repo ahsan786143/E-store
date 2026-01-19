@@ -51,8 +51,13 @@ export const zSchema = z.object({
   description: z.string().min(3, "Description is required"),
   media:z.array(z.string()),
   product:z.string().min(3, "Product is required"),
-  color:z.string().min(3, "Color is required"),
-  size:z.string().min(1, "Size is required"),
+color: z
+  .string()
+  .min(3, "Color is required")
+  .transform((val) => {
+    const trimmed = val.trim().toLowerCase();
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+  }),  size:z.string().min(1, "Size is required"),
   sku:z.string().min(3, "Sku is required"),
   code:z.string().min(3, "Code is required"),
   discountPercentage: z.union([ 

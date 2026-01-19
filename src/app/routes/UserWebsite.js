@@ -7,3 +7,5 @@ export const WEBSITE_RESETPASSWORD ="/auth/reset-password";
 // user routes
 
 export const USER_DASHBOARD = "/my-account";
+
+export const WEBSITE_SHOP = "/shop";

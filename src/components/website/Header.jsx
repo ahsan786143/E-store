@@ -4,6 +4,7 @@ import {
   USER_DASHBOARD,
   WEBSITE_HOME,
   WEBSITE_LOGIN,
+  WEBSITE_SHOP,
 } from "@/app/routes/UserWebsite";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -66,7 +67,7 @@ const Header = () => {
               {[
                 { label: "Home", href: WEBSITE_HOME },
                 { label: "About", href: "#" },
-                { label: "Shop", href: "#" },
+                { label: "Shop", href: WEBSITE_SHOP },
                 { label: "T-shirt", href: "#" },
                 { label: "Hoodies", href: "#" },
                 { label: "Oversized", href: "#" },

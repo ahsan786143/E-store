@@ -18,17 +18,15 @@ export async function GET(request, { params }) {
       return response(false, 400, "Invalid media ID");
     }
 
-    // Fetch media
     const getCategory = await CategoryModel.findOne(
       { _id: id, deletedAt: null },
-      // "_id createdAt public_id path thumbnail_url secure_url deletedAt"
     ).lean();
 
     if (!getCategory) {
-      return response(false, 404, "Media not found");
+      return response(false, 404, "Category not found");
     }
 
-    return response(true, 200, "Media found", getCategory);
+    return response(true, 200, "Category found", getCategory);
   } catch
   (error) {
     return catchError(error);
