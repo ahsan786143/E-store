@@ -5,6 +5,7 @@ import { IoIosArrowRoundForward } from 'react-icons/io'
 import ProductBox from './ProductBox'
 
 const FeatureProduct = async() => {
+  
   const{data:productData}=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`  );
   if(!productData.success) return null;
   return (
