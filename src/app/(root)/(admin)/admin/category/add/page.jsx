@@ -40,7 +40,7 @@ const AddCategory = () => {
       name: "",
       slug: "",
     },
-  });
+  })
 
   useEffect(() => {
     const name = form.getValues("name");
