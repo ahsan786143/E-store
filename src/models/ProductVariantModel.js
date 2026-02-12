@@ -17,8 +17,7 @@ const ProductVariantSchema = new mongoose.Schema(
     size: {
       type: String,
       required: true,
-      unique : true,
-      lowercase : true,
+      uppercase : true,
       trim : true
     },
     

@@ -29,6 +29,7 @@ const Filter = () => {
   const { data: colorData } = useFetch("/api/product-variant/colors");
   const { data: sizeData } = useFetch("/api/product-variant/sizes");
 
+
   const urlSearchParams = new URLSearchParams(searchParams.toString());
   const router = useRouter();
 
@@ -90,13 +91,12 @@ const Filter = () => {
   };
   return (
     <div>
-      {searchParams.size >0 && 
-             <Button type="button" variant="destructive" className="w-full" asChild >
-              <Link href={WEBSITE_SHOP}>
-                Clear Filter</Link>
+{searchParams.toString().length > 0 && (
+  <Button variant="destructive" className="w-full" asChild>
+    <Link href={WEBSITE_SHOP}>Clear Filter</Link>
+  </Button>
+)}
 
-             </Button>
-      }
       <Accordion type="multiple" defaultValue={["1", "2", "3", "4"]}>
         <AccordionItem value="1">
           <AccordionTrigger className="uppercase font-semibold hover:no-underline">

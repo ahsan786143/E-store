@@ -68,9 +68,17 @@ color: z
     z.number().positive("Expected positive Value, received negative"),
     z.string().transform((val)=> Number(val)).refine((val)=>!isNaN(val )&& val>= 0, "Please enter a valid number"),
   ]),
-  validity:z.coerce.date()
+  validity:z.coerce.date(),
 
+  userId:z.string().min(3, "User Id is required"),
+  rating: z.union([ 
+    z.number().positive("Expected positive Value, received negative"),
+    z.string().transform((val)=> Number(val)).refine((val)=>!isNaN(val )&& val>= 0, "Please enter a valid number"),
+  ]),
+  review:z.string().min(3, "Review is required"),
 })
+
+
 .refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],

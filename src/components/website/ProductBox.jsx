@@ -4,13 +4,14 @@ import Image from "next/image";
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { WEBSITE_PRODUCT_DETAILS } from "@/app/routes/UserWebsite";
 
 const ProductBox = ({ product }) => {
   const image = product?.media?.[0];
 
   return (
     <div className="group relative bg-white border rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-     <Link href="">
+     <Link href={WEBSITE_PRODUCT_DETAILS(product.slug)}>
       {/* Discount Badge */}
       {product?.discountPercentage > 0 && (
         <span className="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
@@ -45,7 +46,7 @@ const ProductBox = ({ product }) => {
             })}
           </span>
 
-          <span className="text-lg font-bold">
+          <span className="text-lg font-semibold">
             {product?.sellingPrice?.toLocaleString("en-PK", {
               style: "currency",
               currency: "PKR",
