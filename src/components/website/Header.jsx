@@ -22,8 +22,8 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b lg:px-32 px-4">
-      <div className="flex justify-between items-center lg:py-5 py-3">
+    <header className="bg-white border-b lg:px-32 px-4 ">
+      <div className="flex justify-between items-center lg:py-5 py-3 ">
         {/* Logo */}
         <Link href={WEBSITE_HOME}>
           <Image
@@ -89,15 +89,14 @@ const Header = () => {
           </nav>
 
           {/* Right Icons */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 ">
             <button type="button">
               <IoIosSearch
                 size={24}
                 className="text-gray-500 hover:text-primary cursor-pointer"
               />
             </button>
-
-            <Cart />
+               <Cart    />
 
             {!auth ? (
               <Link href={WEBSITE_LOGIN}>
