@@ -16,11 +16,13 @@ import Link from "next/link";
 import { WEBSITE_CART, WEBSITE_CHECKOUT } from "@/app/routes/UserWebsite";
 import { removeFromCart } from "@/store/reducer/cartReducer";
 import { showToast } from "@/lib/showToast";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
   const [subtotal, setSubtotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const cart = useSelector((store) => store.cartStore);
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const Cart = () => {
       <SheetTrigger className="relative">
         <BsCart2
           size={28}
-          className="text-gray-600 hover:text-primary transition duration-300"
+          className="text-gray-600 hover:text-primary transition duration-300 "
         />
         {cart.count > 0 && (
           <span className="absolute top-0 right-0 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow-lg animate-pulse">
@@ -181,6 +183,7 @@ const Cart = () => {
             </Button>
 
             <Button
+              
               type="button"
               className={`flex-1 h-12 font-semibold ${
                 cart.count === 0 ? "opacity-50 cursor-not-allowed" : ""
@@ -188,6 +191,7 @@ const Cart = () => {
               onClick={() => {
                 if (cart.count > 0) setOpen(false);
                 else showToast("error", "Cart is empty");
+                router.push(WEBSITE_CHECKOUT);
               }}
             >
               <Link href={cart.count > 0 ? WEBSITE_CHECKOUT : "#"}>Checkout</Link>

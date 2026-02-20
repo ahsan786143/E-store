@@ -96,7 +96,11 @@ const Header = () => {
                 className="text-gray-500 hover:text-primary cursor-pointer"
               />
             </button>
+
+            <div className="cursor-pointer">
+
                <Cart    />
+            </div>
 
             {!auth ? (
               <Link href={WEBSITE_LOGIN}>
