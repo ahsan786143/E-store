@@ -5,8 +5,14 @@ import { IoIosArrowRoundForward } from 'react-icons/io'
 import ProductBox from './ProductBox'
 
 const FeatureProduct = async() => {
-  
-  const{data:productData}=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`  );
+   let productData=null;
+  try{
+    const{data}=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`  );
+    productData=data
+}
+  catch(error){
+   console.log(error)
+  }
   if(!productData.success) return null;
   return (
     <section  className='lg:px-32 px-4 sm:py-10 '>
