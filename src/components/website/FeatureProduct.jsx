@@ -6,14 +6,23 @@ import ProductBox from './ProductBox'
 
 const FeatureProduct = async() => {
    let productData=null;
-  try{
-    const{data}=await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`  );
-    productData=data
-}
-  catch(error){
-   console.log(error)
+   try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/get-featured-product`
+    );
+    productData = data;
+  } catch (error) {
+    console.log("Featured Product API Error:", error.message);
   }
-  if(!productData.success) return null;
+
+  if (!productData || !productData.success) {
+    return (
+      <section className="lg:px-32 px-4 sm:py-10">
+        <div className="text-center py-5">No Product Found</div>
+      </section>
+    );
+  }
+
   return (
     <section  className='lg:px-32 px-4 sm:py-10 '>
        <div className='flex justify-between items-center mb-5'>
