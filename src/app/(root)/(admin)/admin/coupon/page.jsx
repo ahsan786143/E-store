@@ -10,7 +10,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {  DT_COUPON_COLUMN } from '@/lib/column';
 import { columnConfig } from '@/lib/helperFunction';
 import Link from 'next/link';
-import React, { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { FiPlus } from 'react-icons/fi';
 
 const breadcrumbData = [
@@ -19,6 +20,15 @@ const breadcrumbData = [
 
 ];
 const showCoupon = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role !== "admin") {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
   const columns = useMemo(() => {
     return columnConfig(DT_COUPON_COLUMN);
     

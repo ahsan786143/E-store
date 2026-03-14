@@ -29,6 +29,7 @@ import { addIntoCart } from "@/store/reducer/cartReducer";
 import { set } from "mongoose";
 import { encode } from "entities";
 import ProductReview from "@/components/website/ProductReview";
+import { useRouter } from "next/navigation";
 
 export default function ProductDetails({
   product,
@@ -43,6 +44,15 @@ export default function ProductDetails({
   const [qty, setQty] = useState(1);
   const [isAddedIntoCart, setIsAddedIntoCart] = useState(false);
   const [isProductLoading, setIsProductLoading] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role !== "user") {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
 
   useEffect(() => {
     setActiveThumb(variant?.media?.[0]?.secure_url);

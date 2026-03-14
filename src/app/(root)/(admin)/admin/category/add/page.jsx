@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import slugify from "slugify";
 import { showToast } from "@/lib/showToast";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: "Home" },
@@ -29,6 +30,15 @@ const breadcrumbData = [
 
 const AddCategory = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+    useEffect(() => {
+      const role = localStorage.getItem("role");
+  
+      if (role !== "admin") {
+        router.push("/auth/login");
+      }
+    }, [router]);
+  
   const formSchema = zSchema.pick({
     name: true,
     slug: true,

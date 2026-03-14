@@ -73,12 +73,13 @@ const Cart = () => {
             {cart.count === 0 ? (
               <div className="h-full flex flex-col justify-center items-center text-gray-400">
                 <Image
-                  src="/assets/images/cartempty.png"
-                  alt="Empty Cart"
-                  width={140}
-                  height={140}
-                  className="opacity-70"
-                />
+  src="/assets/images/cartempty.png"
+  alt="Empty Cart"
+  width={140}
+  height={140}
+  className="opacity-70"
+  priority={false}
+/>
                 <p className="mt-3 text-sm font-medium">Your cart is empty</p>
               </div>
             ) : (
@@ -89,12 +90,12 @@ const Cart = () => {
                 >
                   {/* Product Image */}
                   <Image
-                    src={product?.media || "/assets/images/img-placeholder.webp"}
-                    alt={product?.name}
-                    width={90}
-                    height={90}
-                    className="w-24 h-24 object-cover rounded-xl border"
-                  />
+  src={product?.media || "/assets/images/img-placeholder.webp"}
+  alt={product?.name}
+  width={96}
+  height={96}
+  className="w-24 h-24 object-cover rounded-xl border"
+/>
 
                   {/* Product Details */}
                   <div className="flex-1 flex flex-col justify-between">

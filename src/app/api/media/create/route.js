@@ -2,19 +2,20 @@ import connectToDatabase from "@/lib/db";
 import MediaModel from "@/models/MediaModel";
 import { NextResponse } from "next/server"; 
 import cloudinary from "@/lib/cloudinary"; 
-import { isAuthenticated, response } from "@/lib/helperFunction";
+import { isAuthenticated } from "@/lib/isAuthenticated";
 
 export async function POST(request) {
   const payload = await request.json();
 
   try {
-    // const auth = await isAuthenticated("admin");
-    // if (!auth.isAuth) {
-    //   return NextResponse.json({ // Changed from response.json
-    //     success: false,
-    //     message: "You are not authorized to perform this action",
-    //   }, { status: 401 });
-    // }
+    const auth = await isAuthenticated("admin");
+     console.log("Auth result:", auth);
+    if (!auth.isAuth) {
+      return NextResponse.json({ // Changed from response.json
+        success: false,
+        message: "You are not authorized to perform this action",
+      }, { status: 401 });
+    }
     await connectToDatabase();
     
     const newMedia = await MediaModel.insertMany(payload);

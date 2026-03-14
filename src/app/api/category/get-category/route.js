@@ -6,23 +6,16 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-       const getCategory = await CategoryModel.find(
-      {  deletedAt: null },
-    ).lean();
+    const categories = await CategoryModel.find({
+      $or: [{ deletedAt: null }, { deletedAt: { $exists: false } }],
+    }).lean();
 
-    if (!getCategory) {
+    if (!categories.length) {
       return response(false, 404, "Category not found");
     }
 
-    return response(true, 200, "Category found", getCategory);
-  } catch
-  (error) {
+    return response(true, 200, "Category found", categories);
+  } catch (error) {
     return catchError(error);
   }
 }
-
-
-
-
-
-

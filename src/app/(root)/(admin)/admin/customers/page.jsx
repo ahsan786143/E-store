@@ -7,7 +7,8 @@ import DeleteAction from '@/components/admin/DeleteAction';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {   DT_CUSTOMER_COLUMN } from '@/lib/column';
 import { columnConfig } from '@/lib/helperFunction';
-import React, { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: "Home" },
@@ -15,6 +16,15 @@ const breadcrumbData = [
 
 ];
 const ShowCustomer = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role !== "admin") {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
   const columns = useMemo(() => {
     return columnConfig(DT_CUSTOMER_COLUMN);
     

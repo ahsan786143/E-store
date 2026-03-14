@@ -59,4 +59,3 @@ const Sorting = ({
 };
 
 export default Sorting;
-// 3:04

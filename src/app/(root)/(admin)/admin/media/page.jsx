@@ -12,16 +12,18 @@ import { Label } from "@/components/ui/label";
 import useDeleteMutation from "@/hooks/useDeleteMutation";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: "Home" },
   { href: "", label: "Media" },
 ];
 
-const MediaPage = () => {
+// Fix 2: Isolated into its own component so Suspense can wrap useSearchParams
+const MediaPageInner = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [deleteType, setDeleteType] = useState("SD");
   const [selectedMedia, setSelectedMedia] = useState([]);
@@ -33,25 +35,29 @@ const MediaPage = () => {
     if (searchParams) {
       const trashof = searchParams.get("trashof");
       setSelectedMedia([]);
+      setSelectAll(false);
       setDeleteType(trashof ? "TRASH" : "SD");
     }
   }, [searchParams]);
 
+  // Fix 3: Added withCredentials so cookies (auth token) are sent with request
   const fetchMedia = async (page, deleteType) => {
     const { data: response } = await axios.get(
-      `/api/media?page=${page}&limit=10&deleteType=${deleteType}`
+      `/api/media?page=${page}&limit=10&deleteType=${deleteType}`,
+      { withCredentials: true } // FIXED: was missing, caused 401 auth errors
     );
     return response;
   };
 
-  const { data, error, fetchNextPage, hasNextPage,  isFetching, status } = useInfiniteQuery({
-    queryKey: ["media-data", deleteType],
-    queryFn: async ({ pageParam = 0 }) =>
-      await fetchMedia(pageParam, deleteType === "TRASH" ? "PD" : "SD"),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) =>
-      lastPage.hasMore ? pages.length : undefined,
-  });
+  const { data, error, fetchNextPage, hasNextPage, isFetching, status } =
+    useInfiniteQuery({
+      queryKey: ["media-data", deleteType],
+      queryFn: async ({ pageParam = 0 }) =>
+        await fetchMedia(pageParam, deleteType === "TRASH" ? "PD" : "SD"),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, pages) =>
+        lastPage.hasMore ? pages.length : undefined,
+    });
 
   const deleteMutation = useDeleteMutation("/api/media/delete", ["media-data"]);
 
@@ -67,16 +73,25 @@ const MediaPage = () => {
     setSelectedMedia([]);
   };
 
-  const handleSelectAll = () => setSelectAll((prev) => !prev);
-
-  useEffect(() => {
-    if (selectAll) {
+  // Fix 4: selectAll now only runs when explicitly toggled, not on every data change
+  const handleSelectAll = () => {
+    const next = !selectAll;
+    setSelectAll(next);
+    if (next) {
       const ids = data?.pages.flatMap((p) => p.mediaData.map((m) => m._id));
       setSelectedMedia(ids || []);
     } else {
       setSelectedMedia([]);
     }
-  }, [selectAll, data]);
+  };
+
+  // Sync selectedMedia if new pages load while selectAll is active
+  useEffect(() => {
+    if (selectAll && data) {
+      const ids = data.pages.flatMap((p) => p.mediaData.map((m) => m._id));
+      setSelectedMedia(ids);
+    }
+  }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -92,13 +107,18 @@ const MediaPage = () => {
               {deleteType === "SD" && (
                 <UploadMedia isMultiple={true} queryClient={queryClient} />
               )}
+
+              {/*  Fix 5: Use router.push instead of Link inside Button to avoid nested <a> */}
               {deleteType === "SD" ? (
-                <Button variant="destructive">
-                  <Link href={`${ADMIN_MEDIA_SHOW}?trashof=media`}>Trash</Link>
+                <Button
+                  variant="destructive"
+                  onClick={() => router.push(`${ADMIN_MEDIA_SHOW}?trashof=media`)}
+                >
+                  Trash
                 </Button>
               ) : (
-                <Button>
-                  <Link href={`${ADMIN_MEDIA_SHOW}`}>Back To Media</Link>
+                <Button onClick={() => router.push(ADMIN_MEDIA_SHOW)}>
+                  Back To Media
                 </Button>
               )}
             </div>
@@ -108,7 +128,7 @@ const MediaPage = () => {
         <CardContent className="pb-3">
           {selectedMedia.length > 0 && (
             <div className="py-2 px-3 bg-violet-200 mb-2 rounded flex justify-between items-center">
-              <Label>
+              <Label className="flex items-center gap-2 cursor-pointer">
                 <Checkbox
                   checked={selectAll}
                   onCheckedChange={handleSelectAll}
@@ -146,7 +166,8 @@ const MediaPage = () => {
             </div>
           )}
 
-          {status === "loading" ? (
+          {/* Fix 1: "pending" instead of "loading" for TanStack Query v5 */}
+          {status === "pending" ? (
             <span className="font-semibold text-lg">Loading...</span>
           ) : status === "error" ? (
             <div className="text-red-500 text-sm">{error.message}</div>
@@ -154,7 +175,7 @@ const MediaPage = () => {
             <>
               {data?.pages &&
                 data.pages.flatMap((page) => page.mediaData).length === 0 && (
-                  <div className=" text-sm mb-4">No Media Found</div>
+                  <div className="text-sm mb-4">No Media Found</div>
                 )}
               <div className="grid lg:grid-cols-5 sm:grid-cols-3 grid-cols-2 gap-2 mb-5">
                 {data?.pages?.map((page, index) => (
@@ -174,6 +195,7 @@ const MediaPage = () => {
               </div>
             </>
           )}
+
           {hasNextPage && (
             <ButtonLoading
               type="button"
@@ -182,12 +204,18 @@ const MediaPage = () => {
               text="Load More"
               className="cursor-pointer"
             />
-            
-            
           )}
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+const MediaPage = () => {
+  return (
+    <Suspense fallback={<div className="p-4 font-semibold">Loading...</div>}>
+      <MediaPageInner />
+    </Suspense>
   );
 };
 

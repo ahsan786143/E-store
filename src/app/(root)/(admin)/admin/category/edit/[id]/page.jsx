@@ -21,6 +21,7 @@ import slugify from "slugify";
 import { showToast } from "@/lib/showToast";
 import axios from "axios";
 import useFetch from "@/hooks/useFetch";
+import { useRouter } from "next/navigation";
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: "Home" },
@@ -29,6 +30,15 @@ const breadcrumbData = [
 ];
 
 const EditCategory = ({ params}) => {
+  const router = useRouter();
+    useEffect(() => {
+      const role = localStorage.getItem("role");
+  
+      if (role !== "admin") {
+        router.push("/auth/login");
+      }
+    }, [router]);
+  
    const {id} = use(params)
    const {data: categoryData}= useFetch(`/api/category/get/${id}`)
 

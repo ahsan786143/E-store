@@ -28,6 +28,7 @@ import {
 import { HiMinus, HiPlus } from "react-icons/hi";
 import { BsCart2 } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const breadcrumb = {
   title: "Cart",
@@ -41,6 +42,16 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector((store) => store.cartStore);
   const router = useRouter();
+
+ 
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role !== "user") {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
 
   const cartTotal =
     cart?.products?.reduce((sum, p) => sum + p.sellingPrice * p.qty, 0) ?? 0;
@@ -175,9 +186,10 @@ const CartPage = () => {
                                   product.media ||
                                   "/assets/images/img-placeholder.webp"
                                 }
-                                fill
                                 alt={product.name}
-                                className="object-cover"
+                                width={96}
+                                height={96}
+                                className="object-cover rounded-xl border"
                               />
                             </div>
 
@@ -221,7 +233,7 @@ const CartPage = () => {
                               <button
                                 onClick={() => handleDecrease(product)}
                                 disabled={product.qty <= 1}
-                                 className="h-full w-10 flex items-center justify-center hover:bg-gray-100"
+                                className="h-full w-10 flex items-center justify-center hover:bg-gray-100"
                               >
                                 <HiMinus className=" cursor-pointer" />
                               </button>
@@ -233,7 +245,7 @@ const CartPage = () => {
                               <button
                                 onClick={() => handleIncrease(product)}
                                 disabled={product.qty >= 99}
-                                 className="h-full w-10 flex items-center justify-center hover:bg-gray-100"
+                                className="h-full w-10 flex items-center justify-center hover:bg-gray-100"
                               >
                                 <HiPlus className=" cursor-pointer" />
                               </button>
@@ -375,13 +387,11 @@ const CartPage = () => {
 
               <div className="mt-6 space-y-3 ">
                 {/* Checkout Button */}
-                <button className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-semibold transition cursor-pointer"
-                 onClick={() => router.push(WEBSITE_CHECKOUT
-
-                 )}
+                <button
+                  className="w-full bg-primary text-white py-3 rounded-xl font-semibold transition cursor-pointer"
+                  onClick={() => router.push(WEBSITE_CHECKOUT)}
                 >
                   <BsCart2 className="w-5 h-5 inline-block mr-2" />
-                  
                   Proceed to Checkout
                 </button>
 

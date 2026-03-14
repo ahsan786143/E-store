@@ -41,8 +41,9 @@ export async function GET(request) {
       }
 
       // match stage 
-      let matchStage = {};
-      if(categoryId) matchStage.categoryId = categoryId; // filter by category
+      // let matchStage = {};
+      let matchStage = { deletedAt: null };
+      if(categoryId) matchStage.category = categoryId; // filter by category
 
       if(search){
         matchStage.name = {$regex: search, $options: 'i'};
@@ -57,7 +58,7 @@ export async function GET(request) {
         {$limit: limit + 1},
         {
           $lookup: {
-            from: "ProductVariants",
+            from: "productVariants",
             localField: "_id",
             foreignField: "product",
             as: "variants"

@@ -8,7 +8,7 @@ export async function POST(request) {
   try {
     await connectToDatabase();
     const { token } = await request.json();
-
+    // console.log(token);
     if (!token) {
       return response(false, 401, "Token not found");
     }

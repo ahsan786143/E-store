@@ -10,7 +10,7 @@ import { WEBSITE_LOGIN, WEBSITE_REGISTER } from "@/app/routes/UserWebsite";
 const EmailVerification = ({ params }) => {
   const { token } = React.use(params);
 
-  console.log("Token:", token);
+  // console.log("Token:", token);
 
   const [isVerified, setIsVerified] = useState(false);
   const [loading, setLoading] = useState(true);

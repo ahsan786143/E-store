@@ -1,5 +1,4 @@
 //  help for the NextRespones
-import { jwtVerify } from "jose";
 import { NextResponse } from "next/server"
 
 
@@ -48,32 +47,10 @@ export const generateOTP =()=>{
   return otp
 }
 
-// export const isAuthenticated = async (role) => {
-//   try {
-//     const cookieStore = await cookies(); // Note: cookies() is async in newer Next.js versions
-//     const access_token = cookieStore.get("access_token");
 
-//     if (!access_token?.value) {
-//       return { isAuth: false };
-//     }
 
-//     const secret = new TextEncoder().encode(process.env.SECRET_KEY);
-//     const { payload } = await jwtVerify(access_token.value, secret);
 
-//     if (role && payload.role !== role) {
-//       return { isAuth: false };
-//     }
 
-//     return {
-//       isAuth: true,
-//       userId: payload._id,
-//       role: payload.role,
-//     };
-//   } catch (error) {
-//     console.error("Auth Error:", error.message);
-//     return { isAuth: false };
-//   }
-// };
 export const columnConfig = (column, isCreatedAt = false, isUpdatedAt = false, isDeletedAt = false) => {
   const newColumn = [...column];
 
@@ -106,3 +83,5 @@ export const columnConfig = (column, isCreatedAt = false, isUpdatedAt = false, i
 
   return newColumn;
 };
+
+

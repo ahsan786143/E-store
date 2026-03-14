@@ -40,3 +40,6 @@ export const ADMIN_REVIEW_SHOW="/admin/review";
 
 // Trash route 
 export const ADMIN_TRASH="/admin/trash";
+
+// order route 
+export const ADMIN_ORDER_SHOW="/admin/order-show";

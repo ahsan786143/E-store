@@ -14,6 +14,7 @@ import {
    ADMIN_CUSTOMER_SHOW,
    ADMIN_DASHBOARD, 
    ADMIN_MEDIA_SHOW, 
+   ADMIN_ORDER_SHOW, 
    ADMIN_PRODUCT_ADD, 
    ADMIN_PRODUCT_SHOW, 
    ADMIN_PRODUCT_VARIANT_ADD, 
@@ -84,7 +85,7 @@ export const adminAppSidebarMenu=[
   },
    {
     title: "Orders",
-    url:ADMIN_MEDIA_SHOW,
+    url:ADMIN_ORDER_SHOW,
     icon:MdOutlineShoppingBag,
   },
    {

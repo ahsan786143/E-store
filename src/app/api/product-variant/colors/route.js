@@ -6,23 +6,14 @@ export async function GET() {
   try {
     await connectToDatabase();
 
-   
+    const colors = await ProductVariantModel.distinct("color");
 
-    const getColor = await ProductVariantModel.distinct("color");
-
-    if (!getColor) {
+    if (!colors.length) {
       return response(false, 404, "Color not found");
     }
 
-    return response(true, 200, "Color found", getColor);
-  } catch
-  (error) {
+    return response(true, 200, "Color found", colors);
+  } catch (error) {
     return catchError(error);
   }
 }
-
-
-
-
-
-

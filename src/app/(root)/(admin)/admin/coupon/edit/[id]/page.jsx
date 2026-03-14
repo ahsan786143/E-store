@@ -26,6 +26,7 @@ import { showToast } from "@/lib/showToast";
 import axios from "axios";
 import useFetch from "@/hooks/useFetch";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: "Home" },
@@ -36,6 +37,15 @@ const breadcrumbData = [
 const EditCoupon = ({ params}) => {
   const{id}= React.use(params);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    if (role !== "admin") {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
   const {data: getCouponData} = useFetch(`/api/coupon/get/${id}`);
  
   const formSchema = zSchema.pick({

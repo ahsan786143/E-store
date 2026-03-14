@@ -76,7 +76,69 @@ color: z
     z.string().transform((val)=> Number(val)).refine((val)=>!isNaN(val )&& val>= 0, "Please enter a valid number"),
   ]),
   review:z.string().min(3, "Review is required"),
+  code:z.string().min(3, "Coupon is required"),
+   phone: z
+    .string()
+    .min(1, "Phone is required")
+    .transform((val) => val.replace(/\s|-/g, ""))
+    .refine((val) => /^(?:\+92|0)3\d{9}$/.test(val), {
+      message: "Invalid Pakistani phone number",
+    }),
+    address: z
+    .string()
+    .trim()
+    .min(5, "Address must be at least 5 characters")
+    .max(200, "Address too long"),
+
+  city: z
+    .string()
+    .trim()
+    .min(2, "City is required")
+    .max(50, "City too long")
+    .refine((val) => /^[a-zA-Z\s'-]+$/.test(val), {
+      message: "City must contain only letters",
+    }),
+
+  postalCode: z
+    .string()
+    .trim()
+    .refine((val) => /^\d{5}$/.test(val), {
+      message: "Postal code must be 5 digits",
+    }),
+
+  country: z
+    .string()
+    .trim()
+    .min(2, "Country is required")
+    .max(56, "Country name too long"),
+    userId: z.string().optional(), // optional for guest checkout
+
+  products: z
+    .array(
+      z.object({
+        variantId: z.string(),
+        name: z.string(),
+        sellingPrice: z.number(),
+        mrp: z.number().optional(),
+        qty: z.number().int().positive(),
+        media: z.string().optional(),
+        color: z.string().optional(),
+        size: z.string().optional(),
+      })
+    )
+    .min(1, "Cart cannot be empty"),
+
+  subtotal: z.number().min(0),
+  discount: z.number().min(0),
+  couponDiscount: z.number().min(0),
+  total: z.number().min(0),
+  fullName: z
+    .string()
+    .min(3, "Full name must be at least 3 characters"),
+
+    ordernote: z.string().optional(),
 })
+
 
 
 .refine((data) => data.password === data.confirmPassword, {

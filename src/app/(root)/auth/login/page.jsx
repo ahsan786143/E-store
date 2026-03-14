@@ -90,6 +90,8 @@ const LoginPage = () => {
 
       form.reset();
       showToast("success", otpResponse.message);
+      const role = otpResponse.data.role;
+    localStorage.setItem("role", role);
 
       dispatch(login(otpResponse.data));
       if (searchParams.has("calback")) {
